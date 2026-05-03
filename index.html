@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spotify Jam Sticky Overlay</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <aside id="jamWidget" class="jam-widget side-right" aria-label="Spotify Jam widget"></aside>
+  <div id="edgeSensor" class="edge-sensor side-right" aria-hidden="true"></div>
+
+  <button id="showBtn" class="show-btn" type="button" hidden>Show Jam</button>
+
+  <section id="queuePopup" class="queue-popup" role="dialog" aria-label="Queue" aria-hidden="true">
+    <header id="popupHeader" class="popup-header slim">
+      <div class="tab-row">
+        <button id="mainTabBtn" class="tab-btn active" type="button">Queue</button>
+        <button id="settingsTabBtn" class="tab-btn" type="button">Skip/Remove</button>
+      </div>
+      <div class="popup-actions">
+        <button id="joinBtn" class="mini-btn" type="button" aria-label="Join Jam" title="Join Jam">Join</button>
+        <button id="queueBtn" class="mini-btn" type="button" aria-label="Refresh Queue" title="Refresh Queue" aria-haspopup="dialog" aria-expanded="false">Refresh</button>
+        <button id="settingsBtn" class="mini-btn" type="button" aria-label="Settings">Settings</button>
+        <button id="closePopupBtn" class="close-btn" aria-label="Close queue">✕</button>
+      </div>
+    </header>
+    <section id="loginView" class="login-view">
+      <h3>Sign in to Spotify</h3>
+      <p id="accountAttachState">Account not attached.</p>
+      <p id="loginPatchNotesText" class="patch-notes-text"></p>
+      <button id="loginBtn" class="mini-btn" type="button">Get Token</button>
+    </section>
+    <section id="permissionBanner" class="permission-banner" hidden>
+      <span id="permissionBannerText">Spotify permissions need refresh.</span>
+      <button id="permissionBannerBtn" class="mini-btn" type="button">Re-authorize</button>
+    </section>
+
+    <div id="appView">
+    <section id="jamSection" class="jam-section">
+      <h3 class="jam-title-line">Your Jam</h3>
+      <div class="guest-row">
+        <div id="guestAvatars" class="guest-avatars" aria-label="Jam members"></div>
+      </div>
+      <div class="jam-buttons">
+        <button id="inviteBtn" class="mini-btn">Invite</button>
+        <button id="endJamBtn" class="mini-btn">End</button>
+      </div>
+      <p id="memberLine" class="track-meta">No one in the jam yet.</p>
+      <div class="toggle-row">
+        <span>Let others change what's playing</span>
+        <button id="collabToggle" class="toggle-btn on" type="button" aria-pressed="true" aria-label="Toggle collaboration">
+          <span class="knob"></span>
+        </button>
+      </div>
+    </section>
+    <div class="top-row">
+      <span id="statusText" class="status-text">Ready</span>
+    </div>
+    <div class="now-playing" id="nowPlaying">
+      <div class="np-head">
+        <img id="npArtwork" class="artwork np-artwork" alt="" hidden />
+        <div class="np-meta">
+          <p id="npTitle" class="track-name">Nothing playing</p>
+          <p id="npArtist" class="track-meta">Start Spotify playback</p>
+        </div>
+        <div class="track-menu-wrap">
+          <button id="npMenuBtn" type="button" class="icon-action" data-action="track-menu" aria-label="Now playing options" title="Now playing options">•••</button>
+          <div id="npMenu" class="track-menu" hidden>
+            <button type="button" class="track-menu-btn" data-action="np-like">Save To Liked Songs</button>
+            <button type="button" class="track-menu-btn" data-action="np-artist">Go To Artist</button>
+            <button type="button" class="track-menu-btn" data-action="np-album">Go To Album</button>
+            <button type="button" class="track-menu-btn" data-action="np-share">Share</button>
+          </div>
+        </div>
+      </div>
+      <div class="np-progress-row">
+        <span id="npProgressText">0:00</span>
+        <input id="npSeek" type="range" min="0" max="100" value="0" />
+        <span id="npDurationText">0:00</span>
+      </div>
+      <div class="np-controls-row">
+        <div class="np-controls">
+          <button id="npPrevBtn" class="mini-btn icon-btn" type="button" aria-label="Previous track" title="Previous track"></button>
+          <button id="npPlayPauseBtn" class="mini-btn icon-btn" type="button" aria-label="Play/Pause" title="Play/Pause"></button>
+          <button id="npNextBtn" class="mini-btn icon-btn" type="button" aria-label="Next track" title="Next track"></button>
+        </div>
+        <div class="np-volume-row">
+          <span class="np-volume-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="M3 10v4h4l5 4V6L7 10H3z"></path>
+            </svg>
+          </span>
+          <input id="npVolume" type="range" min="0" max="100" value="50" aria-label="Volume" />
+        </div>
+      </div>
+    </div>
+    <div class="search-row">
+      <div class="search-input-wrap">
+        <input id="searchInput" class="token-input" type="text" placeholder="Search songs or artists" autocomplete="off" />
+        <button id="sourceQuickBtn" class="search-end-btn icon-only" type="button" aria-label="Choose source" title="Choose source">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M4 5h16v3H4V5zm0 5h10v3H4v-3zm0 5h16v3H4v-3z"></path>
+          </svg>
+        </button>
+      </div>
+      <button id="clearSearchBtn" class="mini-btn" type="button" hidden aria-label="Clear search filter" title="Clear search filter">✕</button>
+      <button id="searchBtn" class="mini-btn" type="button">Search</button>
+    </div>
+    <div id="sourceQuickMenu" class="source-quick-menu" hidden></div>
+
+    <div class="search-results" id="searchResults" hidden></div>
+
+    <div class="queue-list" id="queueList"></div>
+    </div>
+
+    <div id="settingsView" hidden>
+      <div class="settings-panel">
+        <h3 class="jam-title-line">Settings</h3>
+      </div>
+
+      <div class="settings-group">
+        <h4 class="settings-title">Display</h4>
+        <div class="settings-panel">
+          <span>Position</span>
+          <div class="jam-buttons">
+            <button id="dockLeftBtn" class="mini-btn" type="button">Left</button>
+            <button id="dockRightBtn" class="mini-btn" type="button">Right</button>
+          </div>
+        </div>
+        <div class="settings-panel">
+          <label for="displaySelect">Screen</label>
+          <select id="displaySelect" class="token-input"></select>
+        </div>
+        <div class="settings-panel">
+          <button id="peekBtn" class="mini-btn" type="button" aria-label="Edge Peek Mode" title="Edge Peek Mode">Peek</button>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <h4 class="settings-title">Playback</h4>
+        <div class="settings-panel">
+          <label for="sourceSelect">Source</label>
+          <select id="sourceSelect" class="token-input"></select>
+          <button id="refreshSourcesBtn" class="mini-btn" type="button">Refresh Sources</button>
+        </div>
+        <div class="settings-panel">
+          <label for="deviceSelect">Device</label>
+          <select id="deviceSelect" class="token-input"></select>
+          <button id="refreshDevicesBtn" class="mini-btn" type="button">Refresh Devices</button>
+        </div>
+        <div class="settings-panel">
+          <button id="startPlaybackBtn" class="mini-btn" type="button">Start Playback</button>
+        </div>
+        <div class="settings-panel">
+          <button id="refreshQueueBtn" class="mini-btn" type="button">Refresh Queue</button>
+        </div>
+        <div class="settings-panel">
+          <label for="refreshRateRange">Refresh Speed</label>
+          <input id="refreshRateRange" type="range" min="1" max="10" value="5" />
+          <span id="refreshRateLabel" class="track-meta">Normal</span>
+        </div>
+        <div class="settings-panel">
+          <input id="jamLinkInput" class="token-input" type="text" placeholder="Paste Spotify Jam link (spotify.link/...)" autocomplete="off" />
+          <button id="saveJamLinkBtn" class="mini-btn" type="button">Save Jam Link</button>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <h4 class="settings-title">Account</h4>
+        <div id="authRow" class="auth-row">
+          <input id="tokenInput" class="token-input" type="password" placeholder="Paste Spotify OAuth token" autocomplete="off" />
+          <button id="connectBtn" class="mini-btn" type="button">Connect</button>
+        </div>
+        <div class="settings-panel">
+          <button id="refreshTokenBtn" class="mini-btn" type="button">Refresh Token</button>
+          <button id="logoutBtn" class="mini-btn" type="button">Logout</button>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <h4 class="settings-title">Diagnostics</h4>
+        <div class="settings-panel">
+          <div id="appVersionText" class="diagnostics-text">Version: -</div>
+        </div>
+        <div class="settings-panel">
+          <div id="diagnosticsText" class="diagnostics-text">No diagnostics yet.</div>
+        </div>
+        <div class="settings-panel">
+          <div id="actionLogText" class="diagnostics-text">No action logs yet.</div>
+        </div>
+        <div class="settings-panel">
+          <button id="exportDiagnosticsBtn" class="mini-btn" type="button">Export Diagnostics</button>
+          <button id="clearLogBtn" class="mini-btn" type="button">Clear Logs</button>
+          <button id="resetSettingsBtn" class="mini-btn" type="button">Reset UI Settings</button>
+          <button id="resetAppDataBtn" class="mini-btn" type="button">Reset App Data</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

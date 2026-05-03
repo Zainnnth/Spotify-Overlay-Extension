@@ -1,0 +1,31 @@
+{
+  "name": "spotify-jam-sticky-widget",
+  "version": "1.0.0",
+  "description": "Always-on-top Spotify Jam style sticky overlay widget",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-builder --win portable"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^31.0.2",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.ps450.spotifyjamstickywidget",
+    "productName": "Spotify Jam Sticky Widget",
+    "files": [
+      "**/*",
+      "!dist/**",
+      "!.electron-temp/**",
+      "!node_modules/.cache/**"
+    ],
+    "win": {
+      "target": [
+        "portable"
+      ]
+    }
+  }
+}

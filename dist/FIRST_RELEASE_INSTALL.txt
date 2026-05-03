@@ -1,0 +1,10 @@
+# Spotify Overlay Extension - Install
+
+1. Download and extract this ZIP.
+2. Run `Spotify Jam Sticky Widget 1.0.0.exe`.
+3. In the app, sign in with Spotify using **Get Token**.
+4. Select playback device/source and use the overlay controls.
+
+Notes:
+- Windows may show a SmartScreen prompt because this build is unsigned.
+- This is a portable build; no installer is required.
