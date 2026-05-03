@@ -3,3 +3,5 @@ Has a few little bugs that I'm in the process of ironing out but otherwise it do
 will update later.
 
 also upon launch dont be alarmed if you dont see anything just mouseover to your furthest right side of screen and the overlay will appear :)
+
+will need spotify open to make any use of it so in the settings tba verify you have a device setup then press start playback or go onto spotify and play the initial track to get it going, will update to make this more seamless and obvious too.
